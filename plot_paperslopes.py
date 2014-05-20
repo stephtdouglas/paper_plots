@@ -1,5 +1,5 @@
 import numpy as np
-import get_data, calc_rossby, calc_pmax2, fitting
+import get_data, calc_rossby, calc_pmax2, fitting, cPickle
 import matplotlib.pyplot as plt
 import plot_grid as pg
 import asciitable as at
@@ -22,6 +22,30 @@ def simple(eqw,ueqw,chi):
     dnerr_ulim_lha[(eqw>0) & ((eqw-ueqw)>0)] = -99.
 
     return ulim_lha, uperr_ulim_lha, dnerr_ulim_lha
+
+def quantile(x,quantiles):
+    xsorted = sorted(x)
+    qvalues = [xsorted[int(q * len(xsorted))] for q in quantiles]
+    return zip(quantiles,qvalues)
+
+def rossby_model(p,Ro):
+    sat_level,turnover,beta = p[0],p[1],p[2]
+    y = np.ones(len(Ro))*sat_level
+
+    constant = sat_level/(turnover**beta)
+    un_sat = np.where(Ro>=turnover)[0]
+    y[un_sat] = constant*(Ro[un_sat]**beta)
+
+    return y
+
+
+infile = open('/home/stephanie/ptf/fit_rossby/fit_rossby.pkl','rb')
+samples = cPickle.load(infile)
+infile.close()
+sl_mcmc = quantile(samples[:,0],[.16,.5,.84])
+to_mcmc = quantile(samples[:,1],[.16,.5,.84])
+be_mcmc = quantile(samples[:,2],[.16,.5,.84])
+
 
 pdat,pobs,pobsnr,pobsr = get_data.get_data('P')
 hdat,hobs,hobsnr,hobsr = get_data.get_data('H')
@@ -71,22 +95,36 @@ print max_mass
 
 figure(figsize=(8,12))
 ax = subplot(211)
+xl = np.arange(0.001,2.0,0.005)
+random_sample = samples[np.random.randint(len(samples), size=200)]
+for p in random_sample:
+    ax.plot(xl,rossby_model(p,xl),color='LightGrey')
+sat_level = sl_mcmc[1][1]
+turnover = to_mcmc[1][1]
+x = xl[xl>turnover]
+constant = sat_level/(turnover**-1.)
+ax.plot(x,constant*(x**-1.),'k--',lw=1.5,label=r'$\beta=\ -1$')
+constant = sat_level/(turnover**-2.1)
+ax.plot(x,constant*(x**-2.1),'k:',lw=2,label=r'$\beta=\ -2.1$')
+constant = sat_level/(turnover**-2.7)
+ax.plot(x,constant*(x**-2.7),'k-.',lw=1.5,label=r'$\beta=\ -2.7$')
+
 ax.errorbar(
-    10**pros[(pmass<=1.3) & (pmass>0.1) & (pbin==False) & (peqw-pueqw>0)
+    10**pros[(pmass<=1.3) & (pmass>0.1) & (pbin==False) & ((peqw-pueqw)>0)
         & ((ppmem>=pmem_threshold) | (ppmem<0))],
-    pll[(pmass<=1.3) & (pmass>0.1) & (pbin==False)  & (peqw-pueqw>0)
+    pll[(pmass<=1.3) & (pmass>0.1) & (pbin==False)  & ((peqw-pueqw)>0)
         & ((ppmem>=pmem_threshold) | (ppmem<0))],
-    pull[(pmass<=1.3) & (pmass>0.1) & (pbin==False)  & (peqw-pueqw>0)
+    pull[(pmass<=1.3) & (pmass>0.1) & (pbin==False)  & ((peqw-pueqw)>0)
         & ((ppmem>=pmem_threshold) | (ppmem<0))],
-    color='c',fmt='*',capsize=0,ms=12,mec='c')
+    color='indigo',fmt='*',capsize=0,ms=12,mec='indigo')
 ax.errorbar(
-    10**hros[(hmass<=1.3) & (hmass>0.1) & (hbin==False)  & (heqw-hueqw>0)
+    10**hros[(hmass<=1.3) & (hmass>0.1) & (hbin==False)  & ((heqw-hueqw)>0)
         & ((hpmem>=pmem_threshold) | (hpmem<0))],
-    hll[(hmass<=1.3) & (hmass>0.1) & (hbin==False)  & (heqw-hueqw>0)
+    hll[(hmass<=1.3) & (hmass>0.1) & (hbin==False)  & ((heqw-hueqw)>0)
         & ((hpmem>=pmem_threshold) | (hpmem<0))],
-    hull[(hmass<=1.3) & (hmass>0.1) & (hbin==False)  & (heqw-hueqw>0)
+    hull[(hmass<=1.3) & (hmass>0.1) & (hbin==False)  & ((heqw-hueqw)>0)
         & ((hpmem>=pmem_threshold) | (hpmem<0))],
-    color='c',fmt='*',capsize=0,ms=12,mec='c')
+    color='indigo',fmt='*',capsize=0,ms=12,mec='indigo')
 ax.set_xscale('log')
 ax.set_yscale('log')
 ax.set_ylim(7e-7,5e-4)
@@ -96,28 +134,18 @@ ax.set_xlim(1e-3,2)
 ax.tick_params(labelsize='x-large')
 ax.set_xticklabels((0.001,0.01,0.1,1))
 
-pline = np.where((10**pros>0.001) & (pbin==False) 
-        & ((peqw-pueqw)>0) & (10**pros<0.13) 
-        & ((ppmem>=pmem_threshold) | (ppmem<0)))[0]
-hline = np.where((10**hros>0.001) & (hbin==False) 
-        & ((heqw-hueqw)>0) & (10**hros<0.13)  
-        & ((hpmem>=pmem_threshold) | (hpmem<0)))[0]
-flatlha = np.append(pll[pline],hll[hline])
-flatulha = np.append(pull[pline],hull[hline])
-sat_level = np.average(flatlha)
-plot((0.001,0.13),(sat_level,sat_level),'k-',lw=2)
-x = np.arange(0.13,1.2,0.001)
-constant = sat_level/(0.13**-1.)
-plot(x,constant*(x**-1.),'k-',lw=2,label=r'$\beta=\ -1$')
-constant = sat_level/(0.13**-2.1)
-plot(x,constant*(x**-2.1),'k--',lw=2,label=r'$\beta=\ -2.1$')
-constant = sat_level/(0.13**-2.7)
-plot(x,constant*(x**-2.7),'k-.',lw=2,label=r'$\beta=\ -2.7$')
-legend(loc=3,title=r'$L_{H\alpha}/L_{bol}\ \propto\ Ro^{\beta}$')
+#ax.plot((0.001,0.13),(sat_level,sat_level),'k-',lw=2)
+ax.plot(xl,rossby_model([sl_mcmc[1][1],to_mcmc[1][1],be_mcmc[1][1]],xl),
+    'k-',lw=2,label=r'$\beta=\ {0:.1f}$'.format(be_mcmc[1][1]))
+handles, labels = ax.get_legend_handles_labels()
+new_handles = np.append(handles[-1],handles[0:-1])
+new_labels = np.append(labels[-1],labels[0:-1])
+ax.legend(new_handles,new_labels,loc=3,
+    title=r'$L_{H\alpha}/L_{bol}\ \propto\ Ro^{\beta}$')
 #plt.savefig('uplims_split_{}.png'.format(date))
 
 #xrays
-wprae = at.read('../xray/wright_praesepe_catalog.csv')
+wprae = at.read('/home/stephanie/ptf/xray/wright_praesepe_catalog.csv')
 wra = wprae['ra']
 wdec = wprae['dec']
 wlen = len(wprae)
@@ -146,7 +174,7 @@ pmatch_locl = np.delete(pmatch_locl,np.where(pmatch_l<0))
 pmatch_h = np.delete(pmatch_h,np.where(pmatch_h<0))
 pmatch_l = np.delete(pmatch_l,np.where(pmatch_l<0))
 
-wh = at.read('../xray/wright_hyades_catalog.csv')
+wh = at.read('/home/stephanie/ptf/xray/wright_hyades_catalog.csv')
 wra = wh['ra']
 wdec = wh['dec']
 wlen = len(wh)
@@ -181,23 +209,30 @@ wpLx = 10**wprae['LxLbol']
 whLx = 10**wh['LxLbol']
 
 ax = subplot(212)
-ax.plot(10**pros[pmatch_loch],wpLx[pmatch_h],'*',ms=12,mec='c',
-    mfc='None')
-ax.plot(10**hros[hmatch_loch],whLx[hmatch_h],'*',ms=12,mec='c',
-    mfc='None')
-ax.plot(10**pros[pmatch_locl],wpLx[pmatch_l],'c*',ms=12,mec='c')
-ax.plot(10**hros[hmatch_locl],whLx[hmatch_l],'c*',ms=12,mec='c')
-
 sat_level = 10**-3.13
-constant = sat_level/(0.13**-2)
-ax.plot((0.001,0.13),(sat_level,sat_level),'k-',lw=2)
-x = np.arange(0.13,1.2,0.001)
-constant = sat_level/(0.13**-1.)
-ax.plot(x,constant*(x**-1.),'k-',lw=2,label=r'$\beta=\ -1$')
-constant = sat_level/(0.13**-2.1)
-ax.plot(x,constant*(x**-2.1),'k--',lw=2,label=r'$\beta=\ -2.1$')
-constant = sat_level/(0.13**-2.7)
-ax.plot(x,constant*(x**-2.7),'k-.',lw=2,label=r'$\beta=\ -2.7$')
+random_sample[:,0] = sat_level
+for p in random_sample:
+    ax.plot(xl,rossby_model(p,xl),color='LightGrey')
+x = xl[xl>turnover]
+constant = sat_level/(turnover**-1.)
+ax.plot(x,constant*(x**-1.),'k--',lw=1.5,label=r'$\beta=\ -1$')
+constant = sat_level/(turnover**-2.1)
+ax.plot(x,constant*(x**-2.1),'k:',lw=2,label=r'$\beta=\ -2.1$')
+constant = sat_level/(turnover**-2.7)
+ax.plot(x,constant*(x**-2.7),'k-.',lw=1.5,label=r'$\beta=\ -2.7$')
+ax.plot(xl,rossby_model([sat_level,to_mcmc[1][1],be_mcmc[1][1]],xl),
+    'k-',lw=2,label=r'$\beta=\ {0:.1f}$'.format(be_mcmc[1][1]))
+ax.plot(10**pros[pmatch_loch],wpLx[pmatch_h],'*',ms=12,mec='indigo',
+    mfc='None')
+ax.plot(10**hros[hmatch_loch],whLx[hmatch_h],'*',ms=12,mec='indigo',
+    mfc='None')
+ax.plot(10**pros[pmatch_locl],wpLx[pmatch_l],'*',ms=12,mec='indigo',
+    mfc='indigo')
+ax.plot(10**hros[hmatch_locl],whLx[hmatch_l],'*',ms=12,mec='indigo',
+    mfc='indigo')
+
+constant = sat_level/(turnover**-2)
+#ax.plot((0.001,turnover),(sat_level,sat_level),'k-',lw=2)
 #ax.legend(loc=3)
 ax.set_yscale('log')
 ax.set_xscale('log')
@@ -207,7 +242,11 @@ ax.set_ylabel(r'$L_X/L_{bol}$',fontsize='xx-large')
 ax.set_xlabel('Ro',fontsize='x-large')
 ax.tick_params(labelsize='x-large')
 ax.set_xticklabels((0.001,0.01,0.1,1))
-legend(loc=3,title=r'$L_{X}/L_{bol}\ \propto\ Ro^{\beta}$')
+handles, labels = ax.get_legend_handles_labels()
+new_handles = np.append(handles[-1],handles[0:-1])
+new_labels = np.append(labels[-1],labels[0:-1])
+ax.legend(new_handles,new_labels,loc=3,
+    title=r'$L_{X}/L_{bol}\ \propto\ Ro^{\beta}$')
 
 plt.savefig('paperslopes.png')
 plt.savefig('paperslopes.ps')
