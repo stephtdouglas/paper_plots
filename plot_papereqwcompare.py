@@ -10,6 +10,7 @@ from emissionline import emissionline
 
 from matplotlib.ticker import MaxNLocator
 from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.colors import Normalize
 from matplotlib.patches import Ellipse
 import matplotlib.cm as cm
 
@@ -96,6 +97,8 @@ def hist2d(x, y, xbins=None, ybins=None, *args, **kwargs):
     ax.set_ylim(extent[1])
 
 
+pdat,pobs,pobs_nr,pobs_r = get_data.get_data('P')
+hdat,hobs,hobs_nr,hobs_r = get_data.get_data('H')
 
 
 colorbins = np.logspace(np.log10(0.5),np.log10(8),16)
@@ -173,14 +176,16 @@ col_bins = colorbins
 zeqw = np.histogram2d(meqw,mrpmK,(eqw_bins,col_bins))
 eqw_bins = np.delete(eqw_bins,-1)+0.25
 col_bins = colorcenter
-logbins = np.logspace(np.log10(35),np.log10(max(zeqw[0].flatten())),6)
+#logbins = np.logspace(np.log10(35),np.log10(max(zeqw[0].flatten())),6)
+logbins = np.arange(25,650,100)
+norm = Normalize(-25,max(zeqw[0].flatten()))
 contour_fill = plt.contourf(col_bins,eqw_bins,zeqw[0],
-     logbins,cmap=cm.get_cmap("Greys"))
-contour_lines = plt.contour(col_bins,eqw_bins,zeqw[0],
-     logbins,colors='Grey',label='SDSS Field')
+     logbins,cmap=cm.get_cmap("Greys"),norm=norm)
+#contour_lines = plt.contour(col_bins,eqw_bins,zeqw[0],
+#     logbins,colors='Grey',label='SDSS Field')
 print logbins
 
-hist2d(mrpmK,meqw,col_bins,bins=100)
+#hist2d(mrpmK,meqw,col_bins,bins=100)
 triangle.hist2d(mrpmK,meqw,plot_contours=False)
 
 plt.errorbar(colorcenter,p_avg,p_std,coloredges,fmt='o',color='b',
