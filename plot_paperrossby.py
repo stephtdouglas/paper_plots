@@ -101,11 +101,11 @@ ax = subplot(111)
 #high mass, slow
 ax.plot(pmass[pgood3 & phigh_mass & pslow],
     pperiods[pgood3 & phigh_mass & pslow],'*',
-    mec='#FF4D4D',mfc='None',ms=10)
+    mec='k',mfc='None',ms=10)
 print pmass[pgood3 & phigh_mass & pslow]
 ax.plot(hmass[hgood3 & hhigh_mass & hslow],
     hperiods[hgood3 & hhigh_mass & hslow],'*',
-    mec='#FF4D4D',mfc='None',ms=10)
+    mec='k',mfc='None',ms=10)
 print hmass[hgood3 & hhigh_mass & hslow]
 #high mass, fast
 ax.plot(pmass[pgood3 & phigh_mass & pfast],
@@ -117,8 +117,8 @@ ax.plot(hmass[hgood3 & hhigh_mass & hfast],
     c='k',mfc='None',ms=10)
 print hmass[hgood3 & hhigh_mass & hfast]
 
-pmarker_sizes = np.floor(np.round(30*(10+1*np.log10(pll))))
-hmarker_sizes = np.floor(np.round(30*(10+1*np.log10(hll))))
+pmarker_sizes = np.floor(np.round(35*(15+2*np.log10(pll))))
+hmarker_sizes = np.floor(np.round(35*(15+2*np.log10(hll))))
 pmarker_sizes[np.isnan(pmarker_sizes)] = 0
 hmarker_sizes[np.isnan(hmarker_sizes)] = 0
 
@@ -136,12 +136,12 @@ print np.where(np.isnan(hmarker_sizes))
 #Plot stars with Lha/Lbol>0
 #high mass, slow
 ax.scatter(pmass[pgood & phigh_mass & pslow],
-    pperiods[pgood & phigh_mass & pslow],c='#FF4D4D',marker='*',edgecolors='none',
+    pperiods[pgood & phigh_mass & pslow],c='k',marker='*',edgecolors='none',
     s=pmarker_sizes[pgood & phigh_mass & pslow],
     label=r'$H\alpha$ emission')
 #print pmarker_sizes[pgood & phigh_mass & pslow]
 ax.scatter(hmass[hgood & hhigh_mass & hslow],
-    hperiods[hgood & hhigh_mass & hslow],c='#FF4D4D',marker='*',edgecolors='none',
+    hperiods[hgood & hhigh_mass & hslow],c='k',marker='*',edgecolors='none',
     s=hmarker_sizes[hgood & hhigh_mass & hslow])
 #print hmarker_sizes[hgood & hhigh_mass & hslow]
 #high mass, fast
@@ -170,11 +170,11 @@ ax.scatter(hmass[hgood & hlow_mass],
 #high mass, slow
 ax.plot(pmass[pgood2 & (p_ulim_lha>0) & phigh_mass & pslow],
     pperiods[pgood2 & (p_ulim_lha>0) & phigh_mass & pslow],'*',
-    mfc='#FF4D4D',mec='none',ms=11)
+    mfc='k',mec='none',ms=11)
 print pmass[pgood2 & (p_ulim_lha>0) & phigh_mass & pslow]
 ax.plot(hmass[hgood2 & (h_ulim_lha>0) & hhigh_mass & hslow],
     hperiods[hgood2 & (h_ulim_lha>0) & hhigh_mass & hslow],'*',
-    mfc='#FF4D4D',mec='none',ms=11)
+    mfc='k',mec='none',ms=11)
 print hmass[hgood2 & (h_ulim_lha>0) & hhigh_mass & hslow]
 #high mass, fast
 ax.plot(pmass[pgood2 & (p_ulim_lha>0) & phigh_mass & pfast],
