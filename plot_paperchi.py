@@ -289,6 +289,11 @@ ax.set_xlabel("(i-J)",fontsize='x-large')
 ax.plot(w08_imJ1,np.log10(w08_chi1),'k--',lw=2)
 ax.plot(w08_imJ2,np.log10(w08_chi2),'k--',lw=2,label='West&Hawley08')
 
+#compare the chi values given in Schmidt et al. 2014 (ArXiv 1406.1228v1)
+s14_imJ = np.arange(2.6,4.5,0.01)
+s14_chi = 1.39e-3 * np.exp(-1.0*s14_imJ/0.602) + 0.939e-6
+ax.plot(s14_imJ,np.log10(s14_chi),'r-.',lw=2,label='Schmidt+14')
+
 plt.legend(loc='best',numpoints=1)
 plt.savefig('paperchi_imJ.png')
 plt.savefig('paperchi_imJ.ps')
