@@ -1,4 +1,4 @@
-import get_data, calc_pmax3
+import get_data
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -102,13 +102,6 @@ ax.text(1.35,0.395,'Kundert+ in prep',color='Green',fontsize='large')
 ax.text(1.35,0.31,'Delorme+ 2011',color='#0099CC',fontsize='large')
 ax.text(1.35,0.248,'Scholz+ 2007,2011',color='SlateBlue',fontsize='large')
 ax.text(1.35,0.2,'Radick+ 1987,1995',color='Goldenrod',fontsize='large')
-
-outm1,smin1,smax1 = calc_pmax3.interpall_mass()
-x1 = np.arange(0.3,smax1-0.00005,0.00001)
-#x1 = np.arange(0.33,smax1-0.00005,0.00001)
-print min(x1),max(x1)
-plt.plot(x1,10**(outm1(x1)),'-',lw=1.5,color='Grey')
-plt.plot(x1,10**(outm1(x1))*0.75,'--',lw=1.5,color='Grey')
 
 plt.savefig('paper_periodmass.png')
 plt.savefig('paper_periodmass.ps')
