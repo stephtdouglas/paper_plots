@@ -93,7 +93,7 @@ max_mass = max(np.append(pmass[(pbin==False) & (peqw-pueqw>0)
         & ((hpmem>=pmem_threshold) | (hpmem<0))]))
 print max_mass
 
-figure(figsize=(8,12))
+figure(figsize=(8,10))
 ax = subplot(211)
 xl = np.arange(0.001,2.0,0.005)
 random_sample = samples[np.random.randint(len(samples), size=200)]
@@ -132,7 +132,8 @@ ax.set_ylabel(r'$L_{H\alpha}/L_{bol}$',fontsize='xx-large')
 #ax.set_xlabel('Ro',fontsize='x-large')
 ax.set_xlim(1e-3,2)
 ax.tick_params(labelsize='x-large')
-ax.set_xticklabels((0.001,0.01,0.1,1))
+#ax.set_xticklabels((0.001,0.01,0.1,1))
+ax.set_xticklabels([])
 
 #ax.plot((0.001,0.13),(sat_level,sat_level),'k-',lw=2)
 ax.plot(xl,rossby_model([sl_mcmc[1][1],to_mcmc[1][1],be_mcmc[1][1]],xl),
@@ -247,6 +248,8 @@ new_handles = np.append(handles[-1],handles[0:-1])
 new_labels = np.append(labels[-1],labels[0:-1])
 ax.legend(new_handles,new_labels,loc=3,
     title=r'$L_{X}/L_{bol}\ \propto\ Ro^{\beta}$')
+
+plt.tight_layout(w_pad=0.01)
 
 plt.savefig('paperslopes.png')
 plt.savefig('paperslopes.ps')
