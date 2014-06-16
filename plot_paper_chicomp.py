@@ -18,7 +18,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 from praesepe_comp import getspt
 from emissionline import emissionline
 
-
+"""
 infil = open('/home/stephanie/ptf/chi/SDSSmatches.pkl','rb')
 cmatch = pickle.load(infil)
 infil.close()
@@ -187,6 +187,8 @@ for i in np.arange(48,58,1):
     std_chi[i-48] = std(m_chi[good])
     avg_chi2[i-48] = average(m_chi2[good])
     std_chi2[i-48] = std(m_chi2[good])
+"""
+
 #plt.errorbar(arange(48,58),avg_chi,std_chi,fmt='o',
 #    label='Calculations for SDSS stars',color='k',ms=8,
 #    elinewidth=2)
@@ -199,20 +201,31 @@ w_chi2 = array([1.16e-4,1.16e-4,0.966e-4,0.738e-4,0.637e-4,0.274e-4,0.176e-4,
 w_chi2_err = array([0.277e-4,0.451e-4,0.306e-4,0.216e-4,0.286e-4,0.128e-4,
     0.052e-4,0.015e-4,0.029e-4,0.011e-4])
 plt.errorbar(arange(48,58)+0.05,w_chi2,w_chi2_err,fmt='o',
-    label='WHW04 values given in W&H08',color='g',mew=2,
+    label='WHW04 values given in West&Hawley08',color='g',mew=2,
     ms=8,elinewidth=2,mec='g',mfc='None',capsize=0)
 
+#compare with spectral-type relations from Schmidt et al. 2014 (ArXiv 1406.1228v1)
+#s_spt = np.arange(7,10,0.5)
+#s14_spt = s_spt+(55-7)
+#s14_chi = 1.09*np.exp(-1.0*s_spt/0.602) - (1.74e-7)*s_spt + 3.88e-6
+#s14_chi1 = s14_chi + 1.43e-6
+#s14_chi2 = s14_chi - 1.43e-6
+
+ax = gca()
+#ax.plot(s14_spt,s14_chi,'r-.',lw=3,label='Schmidt+14')
+#ax.plot(s14_spt,s14_chi1,'r-.',lw=1.5)
+#ax.plot(s14_spt,s14_chi2,'r-.',lw=1.5)
 
 plt.yscale('log')
 plt.legend(loc=3,numpoints=1)
 plt.xlim(47.5,57.5)
 plt.ylim(1e-6,2e-4)
-ax = gca()
 ax.set_xticks(np.arange(48,58))
 ax.set_xticklabels(['M0','M1','M2','M3','M4','M5','M6','M7','M8','M9'])
 ax.tick_params(labelsize='large')
 ax.set_xlabel('Spectral Type',fontsize='large')
 ax.set_ylabel(r'$\chi$',fontsize='x-large')
+
 
 plt.savefig('paper_chicomp.png')
 plt.savefig('paper_chicomp.ps')
