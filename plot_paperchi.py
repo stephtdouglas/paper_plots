@@ -282,17 +282,26 @@ ax.plot(p_imJ[2:],p_chi[2:],'mx',label='PHOENIX',ms=8,mew=3)
 #p,up,fl = fitit(2,p_imJ[2:],p_chi[2:],p_imJerr[2:],p_err_chi[2:])
 #fit_str = '{0:.4f}(i-J)^2 + {1:.4f}(i-J) + {2:.4f}'.format(p[0],p[1],p[2])
 ax.plot(x,calc_chi.chi(x,'i-J')[0],'m-',lw=2)
+
+#calced_chi = calc_chi.chi(x,'i-J')[0]
+#ax.plot(x,calced_chi + calced_chi*0.02,'m-',lw=1)
+#ax.plot(x,calced_chi - calced_chi*0.02,'m-',lw=1)
+
 #ax.text(1.1,-5.75,fit_str,color='m')
 ax.set_ylabel('log($\chi$)',fontsize='x-large')
 ax.set_xlabel("(i-J)",fontsize='x-large')
 
-ax.plot(w08_imJ1,np.log10(w08_chi1),'k--',lw=2)
-ax.plot(w08_imJ2,np.log10(w08_chi2),'k--',lw=2,label='West&Hawley08')
+ax.plot(w08_imJ1,np.log10(w08_chi1),'g--',lw=2)
+ax.plot(w08_imJ2,np.log10(w08_chi2),'g--',lw=2,label='West&Hawley08')
 
 #compare the chi values given in Schmidt et al. 2014 (ArXiv 1406.1228v1)
-s14_imJ = np.arange(2.6,4.5,0.01)
-s14_chi = 1.39e-3 * np.exp(-1.0*s14_imJ/0.602) + 0.939e-6
-ax.plot(s14_imJ,np.log10(s14_chi),'r-.',lw=2,label='Schmidt+14')
+#s14_imJ = np.arange(2.6,4.5,0.01)
+#s14_chi = 1.39e-3 * np.exp(-1.0*s14_imJ/0.602) + 0.939e-6
+#s14_chi1 = 1.39e-3 * np.exp(-1.0*s14_imJ/0.602) + 0.939e-6 + 0.499e-6
+#s14_chi2 = 1.39e-3 * np.exp(-1.0*s14_imJ/0.602) + 0.939e-6 - 0.499e-6
+#ax.plot(s14_imJ,np.log10(s14_chi),'r-.',lw=3,label='Schmidt+14')
+#ax.plot(s14_imJ,np.log10(s14_chi1),'r-.',lw=1.5)
+#ax.plot(s14_imJ,np.log10(s14_chi2),'r-.',lw=1.5)
 
 plt.legend(loc='best',numpoints=1)
 plt.savefig('paperchi_imJ.png')
