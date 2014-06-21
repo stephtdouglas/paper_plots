@@ -187,11 +187,11 @@ ax.plot(hmass[hgood2 & (h_ulim_lha>0) & hhigh_mass & hfast],
 print hmass[hgood2 & (h_ulim_lha>0) & hhigh_mass & hfast]
 
 ax.set_yscale('log')
-ax.set_ylim(1e-1,40)
+ax.set_ylim(1e-1,50)
 ax.set_ylabel('Period (d)',fontsize='x-large')
 ax.set_xlabel(r'Mass (M$_\odot$)',fontsize='x-large')
 ax.set_xlim(1.15,0.1)
-ax.tick_params(labelsize='x-large')
+ax.tick_params(labelsize='large')
 
 xlims = ax.get_xlim()
 mass = np.arange(xlims[1],xlims[0]+0.05,0.05)

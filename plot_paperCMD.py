@@ -314,7 +314,7 @@ def plot_stars_wrap(data,obs_nonrot,obs_rot,cluster,
             ax.text(tx,ty+1.2,'Scholz+ 2007, 2011',color='DarkSlateBlue',fontsize='large')
             symbols = ('*','D','p','v','^','s','o')
             sizes = (9,7,8,8,8,8,5)
-            labels = ('MODspec','Hydra','MagE','Kafka & Honeycutt 2006',
+            labels = ('ModSpec','Hydra','MagE','Kafka & Honeycutt 2006',
                 'Allen & Strom 1995','SDSS','Not observed')
         elif cluster=='H':
             ax.text(tx,ty,'Kundert+ in prep',color='DarkGreen',fontsize='large')
@@ -322,7 +322,7 @@ def plot_stars_wrap(data,obs_nonrot,obs_rot,cluster,
             ax.text(tx,ty+1.2,'Radick+ 1987, 1995',color='Goldenrod',fontsize='large')
             symbols = ('*','o')
             sizes = (9,5)
-            labels = ('MDM','Not observed')
+            labels = ('ModSpec','Not observed')
         lnum = len(symbols)
         for l in range(lnum):
             if symbols[l]=='o':
