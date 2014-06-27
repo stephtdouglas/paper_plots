@@ -79,10 +79,11 @@ eqw = np.append(peqw,heqw)
 ueqw = np.append(pueqw,hueqw)
 binary = np.append(pbin,hbin)
 chi = np.append(pdat.field('CHI'),hdat.field('CHI'))
+pmem = np.append(ppmem,hpmem)
 
 pros = pdat.field('ROSSBY')
 hros = hdat.field('ROSSBY')
-
+rossby = np.append(pros,hros)
 
 p_ulim_lha, p_err_ulim_lha, pdnerr = simple(peqw,pueqw,pdat.field('CHI'))
 h_ulim_lha, h_err_ulim_lha, hdnerr = simple(heqw,hueqw,hdat.field('CHI'))
@@ -93,8 +94,8 @@ max_mass = max(np.append(pmass[(pbin==False) & (peqw-pueqw>0)
         & ((hpmem>=pmem_threshold) | (hpmem<0))]))
 print max_mass
 
-figure(figsize=(8,10))
-ax = subplot(211)
+plt.figure(figsize=(8,10))
+ax = plt.subplot(211)
 xl = np.arange(0.001,2.0,0.005)
 random_sample = samples[np.random.randint(len(samples), size=200)]
 for p in random_sample:
@@ -116,7 +117,7 @@ ax.errorbar(
         & ((ppmem>=pmem_threshold) | (ppmem<0))],
     pull[(pmass<=1.3) & (pmass>0.1) & (pbin==False)  & ((peqw-pueqw)>0)
         & ((ppmem>=pmem_threshold) | (ppmem<0))],
-    color='indigo',fmt='*',capsize=0,ms=12,mec='indigo')
+    color='indigo',fmt='*',capsize=0,ms=12,mec='indigo',barsabove=True)
 ax.errorbar(
     10**hros[(hmass<=1.3) & (hmass>0.1) & (hbin==False)  & ((heqw-hueqw)>0)
         & ((hpmem>=pmem_threshold) | (hpmem<0))],
@@ -124,7 +125,28 @@ ax.errorbar(
         & ((hpmem>=pmem_threshold) | (hpmem<0))],
     hull[(hmass<=1.3) & (hmass>0.1) & (hbin==False)  & ((heqw-hueqw)>0)
         & ((hpmem>=pmem_threshold) | (hpmem<0))],
-    color='indigo',fmt='*',capsize=0,ms=12,mec='indigo')
+    color='indigo',fmt='*',capsize=0,ms=12,mec='indigo',barsabove=True)
+
+# Add upper limits
+#ulim_lha, uperr_ulim_lha, dnerr_ulim_lha = simple(eqw,ueqw,chi)
+ulim_lha = np.append(p_ulim_lha,h_ulim_lha)
+uperr_ulim_lha = np.append(p_err_ulim_lha,h_err_ulim_lha)
+dnerr_ulim_lha = np.append(pdnerr,hdnerr)
+good_stars = np.where((pmem>pmem_threshold) & (abs(eqw)<10)
+    & (abs(rpmKerr)<1) & ((eqw-ueqw)<0) 
+    & (binary==0))[0]
+pup = (np.ones(2*len(good_stars))*1e-6).reshape(2,-1)
+pup[1] = uperr_ulim_lha[good_stars]
+pup[0] = dnerr_ulim_lha[good_stars]
+error_color="#B799CD"
+ax.errorbar(10**rossby[good_stars], ulim_lha[good_stars],
+    pup,ecolor=error_color,#label=plot_label+' upper limit',
+    color=error_color,fmt=None,lolims=True,barsabove=True)
+
+
+
+
+
 ax.set_xscale('log')
 ax.set_yscale('log')
 ax.set_ylim(7e-7,5e-4)
@@ -209,7 +231,7 @@ hmatch_l = np.delete(hmatch_l,np.where(hmatch_l<0))
 wpLx = 10**wprae['LxLbol']
 whLx = 10**wh['LxLbol']
 
-ax = subplot(212)
+ax = plt.subplot(212)
 sat_level = 10**-3.13
 random_sample[:,0] = sat_level
 for p in random_sample:
