@@ -173,7 +173,7 @@ mK_err1 = pdat.field('TWOMASS_KERR')[pobsr]
 mK_err = mK_err1[mK_loc]
 
 plot_mass(ax,mK,dist,dist_err,mK_err,0.12)
-ax.text(1.35,0.14,'Typical Mass Uncertainty',color='k')
+ax.text(1.35,0.14,'Typical Mass Uncertainty in Praesepe',color='k')
 
 
 plt.savefig('paper_periodmass.png')
