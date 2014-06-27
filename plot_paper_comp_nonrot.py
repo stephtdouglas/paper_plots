@@ -90,13 +90,13 @@ avg_eqw_nrot = np.ones(len(bin_centers))*-99.
 unc_eqw_nrot = np.ones(len(bin_centers))*-99.
 
 def add_it(avg1,unc1,avg2,unc2):
-    avg_out = copy(avg1)
-    unc_out = copy(unc1)
-    good = np.where((isnan(avg1)==False) & (isnan(avg2)==False)
+    avg_out = np.copy(avg1)
+    unc_out = np.copy(unc1)
+    good = np.where((np.isnan(avg1)==False) & (np.isnan(avg2)==False)
         & (avg1>-98) & (avg2>-98))[0]
     avg_out[good] = (avg1[good]+avg2[good])/2.
     unc_out[good] = np.sqrt(unc1[good]**2+unc2[good]**2)/2.
-    good2 = np.where(isnan(avg1) & (isnan(avg2)==False)  & (avg2>-98))[0]
+    good2 = np.where(np.isnan(avg1) & (np.isnan(avg2)==False)  & (avg2>-98))[0]
     avg_out[good2] = avg2[good]
     unc_out[good2] = unc2[good]
     return avg_out, unc_out
@@ -153,7 +153,7 @@ ax.errorbar(bin_centers,avg_eqw_rot,unc_eqw_rot,coloredges,
     fmt='*',color='#FF4D4D',mec='#FF4D4D',ms=9,label='Rotators',capsize=0)
 ax.errorbar(bin_centers,avg_eqw_nrot,unc_eqw_nrot,coloredges,
     fmt='^',color='k',ms=9,capsize=0,
-    label='Non-rotators')
+    label='Non-periodic variables')
 avg_eqw_rot,unc_eqw_rot = add_it(avg_eqw_rot,unc_eqw_rot,
     avg_eqw_bin_rot,unc_eqw_bin_rot)
 avg_eqw_nrot,unc_eqw_nrot = add_it(avg_eqw_nrot,unc_eqw_nrot,
@@ -162,7 +162,7 @@ ax.errorbar(bin_centers[:-3]+0.03,avg_eqw_rot[:-3],unc_eqw_rot[:-3],fmt='*',
     color='#FF4D4D',mec='#FF4D4D',mfc='None',ms=9,
     label='Rotators (w/ binaries)',capsize=0)
 ax.errorbar(bin_centers[:-3]+0.03,avg_eqw_nrot[:-3],unc_eqw_nrot[:-3],fmt='^',
-    color='k',mfc='None',ms=9,label='Non-rotators (w/ binaries)',capsize=0)
+    color='k',mfc='None',ms=9,label='Non-periodic variables (w/ binaries)',capsize=0)
 ax.set_xlim(0.25,6.8)
 ax.set_ylim(8,-10)
 ax.set_xlabel('(r\'-K)',fontsize='large')
