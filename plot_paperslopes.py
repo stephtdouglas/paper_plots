@@ -99,7 +99,7 @@ ax = plt.subplot(211)
 xl = np.arange(0.001,2.0,0.005)
 random_sample = samples[np.random.randint(len(samples), size=200)]
 for p in random_sample:
-    ax.plot(xl,rossby_model(p,xl),color='LightGrey')
+    ax.plot(xl,rossby_model(p,xl),color='LightGrey',zorder=-100)
 sat_level = sl_mcmc[1][1]
 turnover = to_mcmc[1][1]
 x = xl[xl>turnover]
