@@ -55,6 +55,7 @@ def sidebyside():
     for i in range(klen):
         axh.text(kh_rpmK[i],texty,kh_spt[i],fontsize='large')
     axh.tick_params(which='both',top=False)
+    axh.text(5.75,3.75,'Hyades',fontsize='large')
 
     plot_stars(pdat,axp)
     axp.set_ylim(21,6)
@@ -64,6 +65,7 @@ def sidebyside():
     for i in range(klen):
        axp.text(kh_rpmK[i],texty,kh_spt[i],fontsize='large')
     axp.tick_params(which='both',top=False)
+    axp.text(5.4,10.4,'Praesepe',fontsize='large')
 
     plt.savefig('paper_rsource.ps',orientation='landscape')
     plt.savefig('paper_rsource.png')

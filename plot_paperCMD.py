@@ -389,6 +389,9 @@ def sidebyside():#p_type,colr='rK',p_mem=False,ploterrs=True):
         axp.text(kh_rpmK[i],texty,kh_spt[i],fontsize='large')
     axh.tick_params(which='both',top=False)
     axp.tick_params(which='both',top=False)
+    axh.text(5.75,3.75,'Hyades',fontsize='large')
+    axp.text(5.4,13,'Praesepe',fontsize='large')
+
     plt.savefig('paper_completeness.png')
     plt.savefig('paper_completeness.ps',orientation='landscape')
 
