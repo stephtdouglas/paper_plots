@@ -94,7 +94,7 @@ def plotit(dat,obs,ax1,plot_color,plot_marker,plot_label,spt_field,
             error_color='#FFA280'#'#FF6A33'
         ax1.errorbar(rmK[good_stars],
             ulim_lha[good_stars],
-            pup,ecolor=error_color,label=plot_label+' upper limit',
+            pup,ecolor=error_color,
             color=error_color,fmt=None,lolims=True)
 #        print rmK[good_stars]
 #        print ulim_lha[good_stars]
@@ -128,7 +128,7 @@ plotit(hdat,hobs,ax,
     'OrangeRed',#'#FFAA00',
     'D','Hyades','MDM_SPEC_ADAMSPT','MDM_SPECMATCH',0,'color')
 ax.legend(numpoints=1,handletextpad=0.2,
-    handlelength=1,borderaxespad=0.2,loc=2)
+    handlelength=1,borderaxespad=0.2,loc=2,frameon=False)
 ax.set_ylim(1.5,-15)
 texty = -15.25
 for i in range(klen):
@@ -155,7 +155,17 @@ plotit(hdat,hobs,ax,
     'OrangeRed',#'#FFAA00',
     'D','Hyades','MDM_SPEC_ADAMSPT','MDM_SPECMATCH',0,'lha')
 ax.legend(numpoints=1,handletextpad=0.2,
-    handlelength=1,borderaxespad=0.2,loc=2)
+    handlelength=1,borderaxespad=0.2,loc=2,frameon=False)
+
+legendx = 1.64
+ltextx = 1.73
+p_y = 4.1e-4
+ax.errorbar(legendx,p_y,p_y*0.15,lolims=True,ecolor='#B2B2DC',fmt=None)
+ax.text(ltextx,p_y*0.9,"Praesepe upper limit",fontsize='large')
+h_y = 2.8e-4
+ax.errorbar(legendx,h_y,h_y*0.15,lolims=True,ecolor='#FFA280',fmt=None)
+ax.text(ltextx,h_y*0.9,"Hyades upper limit",fontsize='large')
+
 ax.set_ylim(5e-7,1e-3)
 texty = 1.1e-3
 for i in range(klen):
