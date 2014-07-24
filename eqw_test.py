@@ -52,43 +52,6 @@ plt.show()
 plt.legend(loc=2,numpoints=1,scatterpoints=1,frameon=False)
 plt.savefig('eqw_praesepe_v2.eps', bbox_inches='tight')
 
-# now want to look at median difference in EqW as a function of color
-#color_bins = np.arange(2.0,6.5,0.5)
-#print color_bins
-#binned_ha = np.zeros(8)
-#binned_errors = np.zeros(8)
-#diff_ha = (our_halpha*-1)-their_halpha
-#diff_err = np.sqrt(our_halpha_err**2 + 0.25**2)
-
-#for i in range(len(color_bins)-1):
-#	in_this_bin = np.where((our_color>color_bins[i]) & 
-#			(our_color<=color_bins[i+1]))[0]
-#	binned_ha[i] = np.median(diff_ha[in_this_bin])
-#	binned_errors[i] = np.median(diff_err[in_this_bin])
-
-#print binned_ha, binned_errors
-
-#fig = plt.figure()
-#ax = fig.add_subplot(1,1,1)
-##plt.plot(kh['EW(Ha)'],((our_halpha*-1)-kh['EW(Ha)']),'ro')
-#plt.plot(our_color, diff_ha, 'bo')
-##plt.errorbar(our_color,((our_halpha*-1)-kh['EW(Ha)']), our_halpha_err, capsize=0, ls='none', color='red', marker = 'o') #elinewidth=2) 
-##ax.set_xscale('log')
-#x = np.arange(-2,7)
-#y = x/x - 1
-#plt.plot(x, y, linewidth = 3, linestyle = '-')
-#plt.axhline(y=0, color='green')
-#plt.step(color_bins[:-1], binned_ha, where='post')
-#plt.errorbar(color_bins[:-1]+0.25, binned_ha, binned_errors, capsize = 0, ls='none', color ='red', marker = '*', ms=15)
-##plt.xlabel('K&H06 EqW')
-#plt.xlabel('($r^{\prime}-K$)')
-#plt.ylabel('Our EqW - K&H06 EqW ($\AA$)')
-##plt.xlim(-8.5,0.5)
-#plt.xlim(2,6.0)
-#plt.ylim(-1.75,0.5)
-#plt.title('Praesepe')
-##plt.show()
-#plt.savefig('eqw_praesepe_diff.eps', bbox_inches='tight')
 
 #for Hyades
 pdat_h,pobs,pobsnr,pobsr = get_data.get_data('H')
@@ -139,48 +102,6 @@ for i in range(len(our_h_ra)):
 
 match = np.where(stauffer94_matches!=-9999.)[0]
 
-# looks like there are no matches to the Tendrup 2000 data
-#for i in range(len(our_h_ra)):
-#	for j in range(len(tendrup00_eqws)):
-#		separation_h[i] = np.sqrt(((our_h_ra[i]-hya['RA'][j])*np.cos(our_h_dec[i]*np.pi/180.)*3600.)**2+((our_h_dec[i]-hya['Dec'][j])*3600.)**2)
-#		if ((separation_h[i]<match_tol) and our_h_halpha[i]!=99. and tendrup00_eqws[j]!=-9999.):
-#			tendrup00_matches[i] = tendrup00_eqws[j]
-#print tendrup00_matches
-
-# let's just look at color/EqW for our MDM data
-#good = np.where(our_h_halpha!=99.)[0]
-#fig = plt.figure()
-#ax = fig.add_subplot(1,1,1)
-#plt.errorbar(our_h_color[good], our_h_halpha[good], our_h_halpha_err[good], capsize=0, ls='none', color='orange', marker='D')
-#plt.axhline(y=0)
-#plt.xlabel('($r^{\prime}-K$)')
-#plt.ylabel('Measured EqW ($\AA$)')
-#plt.xlim(1,5.25)
-#plt.ylim(2.75,-10.)
-#plt.title('Hyades')
-##plt.show()
-
-# look at the same for Stauffer 1991/1994/1997 (& Tendrup 2000)
-#good = np.where(stauffer91_matches!=9999.)[0]
-#good = np.where(stauffer97_matches!=9999.)[0]
-##good = np.where(tendrup00_matches!=9999.)[0]
-##print stauffer91_matches[good]
-#fig = plt.figure()
-#ax = fig.add_subplot(1,1,1)
-#plt.plot(our_h_color[good], stauffer91_matches[good], ls='none', color='orange', marker='D')
-#plt.plot(our_h_color[good], stauffer97_matches[good], ls='none', color='orange', marker='d')
-#plt.plot(our_h_color[match], stauffer94_matches[match]*-1., ls='none', color='orange', marker='p')
-##plt.plot(our_h_color[good], tendrup00_matches[good], ls='none', color='orange', marker='p')
-#plt.axhline(y=0)
-#plt.xlabel('($r^{\prime}-K$)')
-#plt.ylabel('Stauffer et al. 1991, 1994, 1997 EqW ($\AA$)')
-#plt.ylabel('Stauffer et al. 1997 EqW ($\AA$)')
-##plt.ylabel('Stauffer et al. 1994 EqW ($\AA$)')
-##plt.ylabel('Tendrup et al. 2000 EqW ($\AA$)')
-#plt.xlim(1.5,5.5)
-#plt.ylim(1.75,-6.0)
-#plt.title('Hyades')
-#plt.show()
 
 # plot the straightforward comparison of EqW measurements
 good = np.where(our_h_halpha!=-99.)[0]
@@ -207,49 +128,3 @@ ax.legend(numpoints=1,handletextpad=0.2,handlelength=1,borderaxespad=0.2,loc='up
 plt.savefig('eqw_Hyades.eps', bbox_inches='tight')
 #plt.show()
 
-# now want to look at median difference in EqW as a function of color
-#good = np.where(our_h_halpha!=-99.)[0]
-#our_good_halpha = our_h_halpha[good]
-#clean = np.where(stauffer91_matches!=-9999.)
-#clean_stauffer91 = stauffer91_matches[clean]
-#diff_1 = (
-
-#diff_h_err = np.sqrt(our_h_halpha_err[good]**2 + 0.026**2)
-#diff_h_ha_1 = (our_h_halpha[good]-stauffer91_matches[good])
-#diff_h_ha_2 = (our_h_halpha[good]-stauffer97_matches[good])
-#diff_h_ha_3 = (our_h_halpha[match]-stauffer94_matches[match])
-#clean = np.where(diff_h_ha_1!=10098.)[0]
-#diff_1 = diff_h_ha_1[clean]
-#color_1 = our_h_color[clean]
-#err_1 = diff_h_err[clean]
-#clean2 = np.where(diff_h_ha_2!=10098.)[0]
-#diff_2 = diff_h_ha_1[clean2]
-#color_2 = our_h_color[clean2]
-#err_2 = diff_h_err[clean2]
-
-#print diff_1
-
-#for i in range(len(color_bins)-1):
-#	in_this_bin = np.where((color_1>color_bins[i]) & 
-#			(color_1<=color_bins[i+1]))[0]
-#	binned_ha[i] = np.median(diff_1[in_this_bin]) #,diff_h_ha_2[in_this_bin],diff_h_ha_3[in_this_bin])
-#	binned_errors[i] = np.median(err_1[in_this_bin])
-
-#print binned_ha, binned_errors
-
-#fig = plt.figure()
-#ax = fig.add_subplot(1,1,1)
-#lines = {'linestyle': 'None'}
-#plt.plot(color_1, diff_1, color='orange', marker='D')
-#plt.plot(our_h_color, diff_h_ha_2, color='orange', marker='d')
-#plt.plot(our_h_color[match], diff_h_ha_3, color='orange', marker='p')
-#plt.axhline(y=0, color='green')
-#plt.errorbar(color_bins[:-1]+0.25, binned_ha, binned_errors, capsize = 0, ls='none', color ='red', marker = '*', ms=15)
-#plt.xlabel('($r^{\prime}-K$)')
-#plt.ylabel('Our EqW - Stauffer et al. 1991, 1994, 1997 EqW ($\AA$)')
-#plt.xlim(-8.5,0.5)
-#plt.xlim(1,6.0)
-#plt.ylim(-3.75,1.5)
-#plt.title('Hyades')
-#plt.show()
-#plt.savefig('eqw_praesepe_diff.eps', bbox_inches='tight')
