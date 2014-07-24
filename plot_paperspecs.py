@@ -84,7 +84,7 @@ ax5.set_ylim(0,8.25)
 ax5.set_xticks((6500,6600))
 ax5.tick_params(labelsize='large',labelleft='off')
 plt.savefig('paper_specex.png')
-plt.savefig('paper_specex.ps',orientation='landscape')
+plt.savefig('paper_specex.eps',orientation='landscape',bbox_inches='tight')
 #savefig('paper_specha.png')
 #savefig('paper_specha.ps')
 

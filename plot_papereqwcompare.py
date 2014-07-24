@@ -251,8 +251,8 @@ texty = -11.25
 for i in range(klen):
    ax.text(kh_rpmK[i],texty,kh_spt[i],fontsize='large')
 
-plt.show()
+#plt.show()
 
 plt.savefig('papereqws_compare.png')
-plt.savefig('papereqws_compare.ps')
+plt.savefig('papereqws_compare.eps',bbox_inches='tight')
 

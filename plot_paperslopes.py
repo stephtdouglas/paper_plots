@@ -274,6 +274,6 @@ ax.legend(new_handles,new_labels,loc=3,
 plt.tight_layout(w_pad=0.01)
 
 plt.savefig('paperslopes.png')
-plt.savefig('paperslopes.ps')
+plt.savefig('paperslopes.eps',bbox_inches='tight')
 
 

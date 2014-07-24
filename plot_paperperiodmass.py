@@ -177,4 +177,4 @@ ax.text(1.35,0.14,'Typical Mass Uncertainty in Praesepe',color='k')
 
 
 plt.savefig('paper_periodmass.png')
-plt.savefig('paper_periodmass.ps')
+plt.savefig('paper_periodmass.eps',bbox_inches='tight')

@@ -393,6 +393,7 @@ def sidebyside():#p_type,colr='rK',p_mem=False,ploterrs=True):
     axp.text(5.4,13,'Praesepe',fontsize='large')
 
     plt.savefig('paper_completeness.png')
-    plt.savefig('paper_completeness.ps',orientation='landscape')
+    plt.savefig('paper_completeness.eps',orientation='landscape',
+        bbox_inches='tight')
 
 sidebyside()

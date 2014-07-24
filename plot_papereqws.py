@@ -4,6 +4,7 @@ import numpy as np
 import praesepe_comp as pc
 import get_data 
 import asciitable as at
+import matplotlib.pyplot as plt
 #import plot_grid as pg
 
 kh = at.read('/home/stephanie/ptf/models/kraushillenbrand5.dat')
@@ -117,7 +118,7 @@ ax = plt.subplot(111)
 ax.set_xlabel('(r\'-K)',fontsize='x-large')
 ax.set_xlim(1.5,6.1)
 ax.tick_params(which='both',width=2,labelsize='x-large',top=False)
-ax.set_ylabel(r'H$\alpha$ EqW',fontsize='x-large')
+ax.set_ylabel(r'H$\alpha$ EqW ($\AA$)',fontsize='x-large')
 
 pdat,pobs,pobs_nr,pobs_r = get_data.get_data('P')
 plotit(pdat,pobs,ax,
@@ -134,7 +135,7 @@ texty = -15.25
 for i in range(klen):
     ax.text(kh_rpmK[i],texty,kh_spt[i],fontsize='large')
 color_f.savefig('papereqws.png')
-color_f.savefig('papereqws.ps')
+color_f.savefig('papereqws.eps',bbox_inches='tight')
 
 
 
@@ -171,7 +172,7 @@ texty = 1.1e-3
 for i in range(klen):
     ax.text(kh_rpmK[i],texty,kh_spt[i],fontsize='large')
 lha_f.savefig('paperlhalbol.png')
-lha_f.savefig('paperlhalbol.ps')
+lha_f.savefig('paperlhalbol.eps',bbox_inches='tight')
 
 """
 lha_f = plt.figure(figsize=(9,8))

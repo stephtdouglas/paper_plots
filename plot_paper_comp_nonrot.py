@@ -175,4 +175,4 @@ for i in range(klen):
 
 
 plt.savefig('paper_eqws_nonrot.png')
-plt.savefig('paper_eqws_nonrot.ps')
+plt.savefig('paper_eqws_nonrot.eps',bbox_inches='tight')

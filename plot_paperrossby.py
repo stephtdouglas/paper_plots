@@ -96,7 +96,7 @@ plt.figure(figsize=(9,8))
 
 alph=0.75
 
-ax = subplot(111)
+ax = plt.subplot(111)
 #Plot statistically inactive stars as open symbols
 #high mass, slow
 ax.plot(pmass[pgood3 & phigh_mass & pslow],
@@ -201,10 +201,11 @@ rossby = np.asarray([0.001,0.01,0.1,1])
 for r in rossby:
     periods = r*tau
     ax.plot(mass,periods,'k--')
-    ax.text(mass[-2],periods[-2]*1.3,'Ro={}'.format(r),fontsize='large')
+    if r>0.005:
+        ax.text(mass[-2],periods[-2]*1.3,'Ro={}'.format(r),fontsize='large')
 #    print periods
 ax.text(0.3,0.11,'Ro={}'.format(0.001),fontsize='large')
 
 
 plt.savefig('paper_rossby.png')
-plt.savefig('paper_rossby.ps')
+plt.savefig('paper_rossby.eps',bbox_inches='tight')

@@ -24,13 +24,13 @@ def plot_stars(dat,ax):
     rmK = dat.field('RPRIME_K')
     sourceflag = dat.field('RMAG_FLAG')
     ax.plot(rmK[sourceflag=='T'],rmag[sourceflag=='T'],'*',mfc='Magenta',
-        mec='None',label='2MASS USNO/Tycho B,V -> r')
+        mec='None',label='2MASS USNO/Tycho B,V -> r\'')
     ax.plot(rmK[sourceflag=='C'],rmag[sourceflag=='C'],'o',mfc='#993399',
         mec='None',label='CMC14 r\'')
     ax.plot(rmK[sourceflag=='U'],rmag[sourceflag=='U'],'d',mfc='Orange',
         mec='None',label='UCAC4 r\'')
     ax.plot(rmK[sourceflag=='S'],rmag[sourceflag=='S'],'s',mfc='DarkBlue',
-        mec='None',label='SDSS r,i -> r')
+        mec='None',label='SDSS r,i -> r\'')
 
 
     ax.set_xlim(0,7)
@@ -67,7 +67,7 @@ def sidebyside():
     axp.tick_params(which='both',top=False)
     axp.text(5.4,10.4,'Praesepe',fontsize='large')
 
-    plt.savefig('paper_rsource.ps',orientation='landscape')
+    plt.savefig('paper_rsource.eps',orientation='landscape',bbox_inches='tight')
     plt.savefig('paper_rsource.png')
 
 sidebyside()
