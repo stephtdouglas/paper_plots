@@ -8,6 +8,7 @@ import plot_grid as pg
 from ha_cont import ha_cont
 from emissionline import emissionline
 
+import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.colors import Normalize
@@ -130,7 +131,7 @@ heqw_err = hdat.field('AVG_EQW_ERR')
 
 mchi, meqw, mlhalbol, mrpmK, mspt = get_sdss.get_halpha()
 
-figure(figsize=(9,8))
+plt.figure(figsize=(9,8))
 for i in range(len(colorbins)-1):
     pbin = ((pdat.field('RPRIME_K')>colorbins[i]) &
         (pdat.field('RPRIME_K')<=colorbins[i+1]) 
@@ -170,22 +171,66 @@ for i in range(len(colorbins)-1):
 
 
 
-
 eqw_bins = np.arange(-15,10,0.5)
 col_bins = colorbins
 zeqw = np.histogram2d(meqw,mrpmK,(eqw_bins,col_bins))
-eqw_bins = np.delete(eqw_bins,-1)+0.25
-col_bins = colorcenter
-#logbins = np.logspace(np.log10(35),np.log10(max(zeqw[0].flatten())),6)
 logbins = np.arange(25,650,100)
-norm = Normalize(-25,max(zeqw[0].flatten()))
-contour_fill = plt.contourf(col_bins,eqw_bins,zeqw[0],
-     logbins,cmap=cm.get_cmap("Greys"),norm=norm)
+norm = Normalize(-50,max(zeqw[0].flatten()))
+
+inact_sum = 0
+non_hist_sum = 0
+for i in range(len(eqw_bins)-1):
+    for j in range(len(col_bins)-1):
+        if (zeqw[0][i,j]>24) and (eqw_bins[i]>=-3):
+            inact_sum += zeqw[0][i,j]
+        else:
+            non_hist_sum += zeqw[0][i,j]
+#            if zeqw[0][i,j]>0:
+#                print "not histogram - ", zeqw[0][i,j]
+print "{} stars in the 'inactive' area of the histogram".format(inact_sum)
+print "(Does not include that one active patch at late types)"
+print "{} stars that are individual points, and that one 25 star patch".format(
+    non_hist_sum)
+print "and {} SDSS stars that have EqW <-15, so aren't included".format(
+    len(np.where(meqw<-15)[0]))
+print "{} total stars by adding, {} in the sample".format(
+    inact_sum+non_hist_sum+len(np.where(meqw<-15)[0]),len(meqw))
+
+
+z2 = zeqw[0].flatten()
+lloc = np.where(z2<25)[0]
+z2[lloc] = -50.
+for l in logbins:
+    #print z2,l,l-100
+    lloc = np.where((z2>=l) & (z2<(l+100)))[0]
+    z2[lloc] = l
+z3 = z2.reshape(zeqw[0].shape)
+
+
+
+histogram = plt.pcolor(col_bins,eqw_bins,z3,cmap=cm.get_cmap("Greys"),norm=norm)
+
+for i in range(len(eqw_bins)-1):
+    for j in range(len(col_bins)-1):
+        if z3[i,j]>24:
+            bad = np.where((meqw>=eqw_bins[i]) & (meqw<eqw_bins[i+1]) &
+               (mrpmK>=col_bins[j]) & (mrpmK<col_bins[j+1]))[0]
+            meqw = np.delete(meqw,bad)
+            mrpmK = np.delete(mrpmK,bad)
+
+#Need to make these points show up now
+plt.plot(mrpmK,meqw,'o',color='#C0C0C0', ms=1.5,mec='none')
+#    , zorder=100, alpha=0.1, rasterized=True)
+
+#eqw_bins = np.delete(eqw_bins,-1)+0.25
+#col_bins = colorcenter
+#contour_fill = plt.contourf(col_bins,eqw_bins,zeqw[0],
+#     logbins,cmap=cm.get_cmap("Greys"),norm=norm)
 #contour_lines = plt.contour(col_bins,eqw_bins,zeqw[0],
 #     logbins,colors='Grey',label='SDSS Field')
-print logbins
+#print logbins
 
-#hist2d(mrpmK,meqw,col_bins,bins=100)
+hist2d(mrpmK,meqw,col_bins,bins=100)
 triangle.hist2d(mrpmK,meqw,plot_contours=False)
 
 plt.errorbar(colorcenter,p_avg,p_std,coloredges,fmt='o',color='b',
@@ -206,6 +251,7 @@ texty = -11.25
 for i in range(klen):
    ax.text(kh_rpmK[i],texty,kh_spt[i],fontsize='large')
 
+plt.show()
 
 plt.savefig('papereqws_compare.png')
 plt.savefig('papereqws_compare.ps')
