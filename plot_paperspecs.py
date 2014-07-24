@@ -4,6 +4,9 @@
 import pyfits, get_data, read_spec
 from praesepe_comp import getspt
 from makemodel import falt2
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+import numpy as np
 
 pdat,pobs,pobsnr,pobsr = get_data.get_data('P')
 hdat,hobs,hobsnr,hobsr = get_data.get_data('H')
@@ -16,7 +19,7 @@ def plot_spec(ax,filename,source,offset,style='k-',smooth=True):
     w,f,n = read_spec.get_spec(filename,source)
     if smooth:
         f = falt2(w,f,resols[source]*0.75)
-    f_norm = f/average(f[(w>=6548) & (w<=6558)])
+    f_norm = f/np.average(f[(w>=6548) & (w<=6558)])
     ax.plot(w,f_norm+offset,style,lw=0.75)
 
 
@@ -29,8 +32,10 @@ mdm_act = 'Praesepe_Hyades/MODspec/Feb2011_n4/HSHJ303.fits'
 mdm_inact = 'Praesepe_Hyades/MODspec/Feb2011_n4/HSHJ272.fits'
 
 # Hydra
-hyd_act = 'Hydra_spectra/PraeB1_ascii/JS430-273.asc'
-hyd_inact = 'Hydra_spectra/PraeF1_ascii/JS365-509.asc'
+#hyd_act = 'Hydra_spectra/PraeB1_ascii/JS430-273.asc'
+#hyd_inact = 'Hydra_spectra/PraeF1_ascii/JS365-509.asc'
+hyd_act = 'Hydra_spectra/PraeB1_new/JS430-273.fits'
+hyd_inact = 'Hydra_spectra/PraeF1_new/JS365-509.fits'
 
 # Mage 
 mage_act = 'Praesepe_Hyades/MagE/JS123_F.fits'
@@ -38,8 +43,8 @@ mage_act = 'Praesepe_Hyades/MagE/JS123_F.fits'
 
 
 textx = 5000
-figure(figsize=(12,6))
-ax4 = subplot2grid((1,5),(0,0),colspan=4)
+plt.figure(figsize=(12,6))
+ax4 = plt.subplot2grid((1,5),(0,0),colspan=4)
 plot_spec(ax4,hyad_inact,'mdm',6,'r-')
 plot_spec(ax4,hyad_act,'mdm',6)
 ax4.text(textx,7.55,'ModSpec (Hyades)',fontstyle='oblique')
@@ -64,7 +69,7 @@ ax4.set_xlabel('Wavelength ($\AA$)',fontsize='x-large')
 ax4.set_ylabel('flux / flux(6555 $\AA$) + offset',fontsize='x-large')
 ax4.tick_params(labelsize='large')
 
-ax5 = subplot2grid((1,5),(0,4))
+ax5 = plt.subplot2grid((1,5),(0,4))
 ax5.add_patch(Rectangle((6548,0),10,11,fc='#DCDCDC',ec='none',fill=True))
 ax5.add_patch(Rectangle((6570,0),10,11,fc='#DCDCDC',ec='none',fill=True))
 plot_spec(ax5,hyad_inact,'mdm',6,'r-',False)
@@ -78,9 +83,8 @@ ax5.set_xlim(6475,6625)
 ax5.set_ylim(0,8.25)
 ax5.set_xticks((6500,6600))
 ax5.tick_params(labelsize='large',labelleft='off')
-show()
-savefig('paper_specex.png')
-savefig('paper_specex.ps',orientation='landscape')
+plt.savefig('paper_specex.png')
+plt.savefig('paper_specex.ps',orientation='landscape')
 #savefig('paper_specha.png')
 #savefig('paper_specha.ps')
 
