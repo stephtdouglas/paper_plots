@@ -44,9 +44,9 @@ plt.ylabel('Measured EqW ($\AA$)', fontsize='x-large')
 plt.xlabel('Kafka & Honeycutt 2006 EqW ($\AA$)', fontsize='x-large')
 plt.ylim(1.,-10.)
 plt.xlim(1.,-10.)
-ax = gca()
+ax = plt.gca()
 ax.tick_params(labelsize='large')
-plt.show()
+#plt.show()
 #plt.text(-2,-8,'161 stars')
 #plt.title('Praesepe')
 plt.legend(loc=2,numpoints=1,scatterpoints=1,frameon=False)
@@ -113,9 +113,9 @@ lines = {'linestyle': 'None'}
 yerr = our_h_halpha_err
 xerr = 0.026  # quoted 1 sigma uncertainty in Stauffer 1991
 plt.errorbar(stauffer91_matches[good], our_h_halpha[good],yerr[good], xerr,  capsize=0, ls='none', color='OrangeRed', marker = 'D', mec="OrangeRed", label='Stauffer+ 1991') #elinewidth=2) 
-plt.errorbar(stauffer94_matches[match]*-1., our_h_halpha[match],yerr[match], xerr,  capsize=0, ls='none', color='OrangeRed', marker = '^', mec="OrangeRed", label='Stauffer+ 1994') #elinewidth=2) 
+plt.errorbar(stauffer94_matches[match]*-1., our_h_halpha[match],yerr[match], stauffer94_matches[match]*0.15,  capsize=0, ls='none', color='OrangeRed', marker = '^', mec="OrangeRed", label='Stauffer+ 1994') #elinewidth=2) 
 #print our_h_halpha[match], xerr[match]
-plt.errorbar(stauffer97_matches[good], our_h_halpha[good], yerr[good],xerr,  capsize=0, ls='none', color='OrangeRed', marker = 's', mec="OrangeRed", label='Stauffer+ 1997') #elinewidth=2) 
+plt.errorbar(stauffer97_matches[good], our_h_halpha[good], yerr[good],stauffer97_matches[good]*0.15,  capsize=0, ls='none', color='OrangeRed', marker = 's', mec="OrangeRed", label='Stauffer+ 1997') #elinewidth=2) 
 plt.ylabel(r'Measured H$\alpha$ EqW ($\AA$)',fontsize='x-large')
 plt.xlabel(r'Literature H$\alpha$ EqW ($\AA$)',fontsize='x-large')
 ax=plt.gca()
