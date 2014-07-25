@@ -14,11 +14,11 @@ import os, bol_corr, read_spec, get_data, pickle
 import scipy.odr as odr
 #from scipy.optimize import minimize
 import pyfits
+import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from praesepe_comp import getspt
 from emissionline import emissionline
 
-"""
 infil = open('/home/stephanie/ptf/chi/SDSSmatches.pkl','rb')
 cmatch = pickle.load(infil)
 infil.close()
@@ -31,7 +31,7 @@ fiber = sdssm[1].data.field('FIBER')
 covey = pyfits.open('/home/stephanie/ptf/chi/superclean.fits')
 
 cmatches = cmatch[cmatch>=0] # index in Andrew's file
-cmatch_loc = where(cmatch>=0)[0] # Index in Kevin's file
+cmatch_loc = np.where(cmatch>=0)[0] # Index in Kevin's file
 cnum = len(cmatches)
 
 m_cont = np.zeros(cnum)
@@ -43,7 +43,7 @@ m_cont3 = np.zeros(cnum)
 
 m_r = covey[1].data.field('RMAG')[cmatch_loc]
 m_rmK = m_r - covey[1].data.field('KMAG')[cmatch_loc]
-m_rmKerr = sqrt(covey[1].data.field('RERR')**2+
+m_rmKerr = np.sqrt(covey[1].data.field('RERR')**2+
      covey[1].data.field('KERR')**2)[cmatch_loc]
 m_Kerr = covey[1].data.field('KERR')[cmatch_loc]
 
@@ -85,27 +85,27 @@ for i in range(cnum):
     m_cont3[i] = ha_cont(w,f,start_cont=6550,end_cont=6560
         ,start_cont2=6570,end_cont2=6580) # erg/s/cm2
 
-m_chi2 = log10(m_cont2/m_fbol)
-m_chi3 = log10(m_cont3/m_fbol)
+m_chi2 = np.log10(m_cont2/m_fbol)
+m_chi3 = np.log10(m_cont3/m_fbol)
 
 
 
 m_eqw = m_eqw*-1.
 m_chi1 = m_cont/m_fbol
 m_err_part = m_rmKerr**2 * m_bcK**2 / m_rmK**2 + m_Kerr**2
-m_err_chi1 = m_chi1*(0.4*log(10.))*np.sqrt(m_err_part) #chi*0.04
-m_err_chi = log10(e)*m_err_chi1/m_chi1
-m_chi = log10(m_chi1)
+m_err_chi1 = m_chi1*(0.4*np.log(10.))*np.sqrt(m_err_part) #chi*0.04
+m_err_chi = np.log10(np.e)*m_err_chi1/m_chi1
+m_chi = np.log10(m_chi1)
 
-andrew_chi = log10(sdssm[1].data.field('LHALBOL')/
+andrew_chi = np.log10(sdssm[1].data.field('LHALBOL')/
     sdssm[1].data.field('EWHA'))[cmatches]
 m_spt = sdssm[1].data.field('SPT')[cmatches]+48
 #m_chi[isnan(m_chi)] = 99.0
 #m_err_chi[isnan(m_chi)] = 50.0
 
-bad = where(isnan(m_chi))[0]
-m_chi = delete(m_chi,bad)
-m_err_chi = delete(m_err_chi,bad)
+bad = np.where(np.isnan(m_chi))[0]
+m_chi = np.delete(m_chi,bad)
+m_err_chi = np.delete(m_err_chi,bad)
 
 
 
@@ -167,13 +167,13 @@ prae_errs = {'u':'SDSSPSFMAGERR_U','g':'SDSSPSFMAGERR_G','r':'SDSSPSFMAGERR_G',
     'i':'SDSSPSFMAGERR_I','z':'SDSSPSFMAGERR_Z','J':'TWOMASS_JERR',
     'K':'TWOMASS_KERR'}
 ckeys = ['u','g','r','i','z','J','K']
-carr = array(ckeys)
+carr = np.array(ckeys)
 cdat = covey[1].data
 
 
-m_spt = delete(m_spt,bad)
+m_spt = np.delete(m_spt,bad)
 m_chi = 10**m_chi
-m_chi2 = delete(m_chi2,bad)
+m_chi2 = np.delete(m_chi2,bad)
 m_chi2 = 10**m_chi2
 
 
@@ -183,24 +183,23 @@ avg_chi2 = np.zeros(10)
 std_chi2 = np.zeros(10)
 for i in np.arange(48,58,1):
     good = np.where(m_spt==i)[0]
-    avg_chi[i-48] = average(m_chi[good])
-    std_chi[i-48] = std(m_chi[good])
-    avg_chi2[i-48] = average(m_chi2[good])
-    std_chi2[i-48] = std(m_chi2[good])
-"""
+    avg_chi[i-48] = np.average(m_chi[good])
+    std_chi[i-48] = np.std(m_chi[good])
+    avg_chi2[i-48] = np.average(m_chi2[good])
+    std_chi2[i-48] = np.std(m_chi2[good])
 
 #plt.errorbar(arange(48,58),avg_chi,std_chi,fmt='o',
 #    label='Calculations for SDSS stars',color='k',ms=8,
 #    elinewidth=2)
-plt.errorbar(arange(48,58),avg_chi2,std_chi2,fmt='o',
+plt.errorbar(np.arange(48,58),avg_chi2,std_chi2,fmt='o',
     label='Calculations for SDSS stars',color='k',ms=8,
     elinewidth=2,capsize=0)
 
-w_chi2 = array([1.16e-4,1.16e-4,0.966e-4,0.738e-4,0.637e-4,0.274e-4,0.176e-4,
+w_chi2 = np.array([1.16e-4,1.16e-4,0.966e-4,0.738e-4,0.637e-4,0.274e-4,0.176e-4,
     0.052e-4,0.06e-4,0.038e-4])
-w_chi2_err = array([0.277e-4,0.451e-4,0.306e-4,0.216e-4,0.286e-4,0.128e-4,
+w_chi2_err = np.array([0.277e-4,0.451e-4,0.306e-4,0.216e-4,0.286e-4,0.128e-4,
     0.052e-4,0.015e-4,0.029e-4,0.011e-4])
-plt.errorbar(arange(48,58)+0.05,w_chi2,w_chi2_err,fmt='o',
+plt.errorbar(np.arange(48,58)+0.05,w_chi2,w_chi2_err,fmt='o',
     label='WHW04 values given in West&Hawley08',color='g',mew=2,
     ms=8,elinewidth=2,mec='g',mfc='None',capsize=0)
 
@@ -211,7 +210,7 @@ plt.errorbar(arange(48,58)+0.05,w_chi2,w_chi2_err,fmt='o',
 #s14_chi1 = s14_chi + 1.43e-6
 #s14_chi2 = s14_chi - 1.43e-6
 
-ax = gca()
+ax = plt.gca()
 #ax.plot(s14_spt,s14_chi,'r-.',lw=3,label='Schmidt+14')
 #ax.plot(s14_spt,s14_chi1,'r-.',lw=1.5)
 #ax.plot(s14_spt,s14_chi2,'r-.',lw=1.5)
@@ -228,4 +227,4 @@ ax.set_ylabel(r'$\chi$',fontsize='x-large')
 
 
 plt.savefig('paper_chicomp.png')
-plt.savefig('paper_chicomp.ps')
+plt.savefig('paper_chicomp.eps',bbox_inches='tight')

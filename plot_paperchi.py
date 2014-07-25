@@ -256,7 +256,7 @@ plt.xlim(2,8.5)
 plt.ylim(-6,-3.5)
 ax.tick_params(labelsize='large')
 plt.savefig('paperchi.png')
-plt.savefig('paperchi.ps')
+plt.savefig('paperchi.eps',bbox_inches='tight')
 
 
 
@@ -305,4 +305,4 @@ ax.plot(w08_imJ2,np.log10(w08_chi2),'g--',lw=2,label='West&Hawley08')
 
 plt.legend(loc='best',numpoints=1)
 plt.savefig('paperchi_imJ.png')
-plt.savefig('paperchi_imJ.ps')
+plt.savefig('paperchi_imJ.eps',bbox_inches='tight')
