@@ -262,14 +262,14 @@ ax.set_xscale('log')
 ax.set_xlim(1e-3,2)
 ax.set_ylim(6e-6,5e-3)
 ax.set_ylabel(r'$L_X/L_{bol}$',fontsize='xx-large')
-ax.set_xlabel('Ro',fontsize='x-large')
+ax.set_xlabel('R_o',fontsize='x-large')
 ax.tick_params(labelsize='x-large')
 ax.set_xticklabels((0.001,0.01,0.1,1))
 handles, labels = ax.get_legend_handles_labels()
 new_handles = np.append(handles[-1],handles[0:-1])
 new_labels = np.append(labels[-1],labels[0:-1])
 ax.legend(new_handles,new_labels,loc=3,
-    title=r'$L_{X}/L_{bol}\ \propto\ Ro^{\beta}$')
+    title=r'$L_{X}/L_{bol}\ \propto\ R_o^{\beta}$')
 
 plt.tight_layout(w_pad=0.01)
 
