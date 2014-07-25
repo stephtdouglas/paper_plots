@@ -103,6 +103,10 @@ for i in range(len(our_h_ra)):
 match = np.where(stauffer94_matches!=-9999.)[0]
 
 
+#match_9194 = np.where((our_h_halpha!=-99.) & (stauffer91_matches!=-9999.) & (stauffer94_matches!=-9999.))[0]
+#match_9497 = np.where((our_h_halpha!=-99.) & (stauffer97_matches!=-9999.) & (stauffer94_matches!=-9999.))[0]
+match_9197 = np.where((our_h_halpha!=-99.) & (stauffer91_matches!=-9999.) & (stauffer97_matches!=-9999.))[0]
+
 # plot the straightforward comparison of EqW measurements
 good = np.where(our_h_halpha!=-99.)[0]
 nspec = len(np.where(stauffer91_matches!=9999.)[0])+len(np.where(stauffer97_matches!=9999.)[0])+1 #that one is the Stauffer 1994 star
@@ -118,6 +122,10 @@ plt.errorbar(stauffer94_matches[match]*-1., our_h_halpha[match],yerr[match], sta
 plt.errorbar(stauffer97_matches[good], our_h_halpha[good], yerr[good],stauffer97_matches[good]*0.15,  capsize=0, ls='none', color='OrangeRed', marker = 's', mec="OrangeRed", label='Stauffer+ 1997') #elinewidth=2) 
 plt.ylabel(r'Measured H$\alpha$ EqW ($\AA$)',fontsize='x-large')
 plt.xlabel(r'Literature H$\alpha$ EqW ($\AA$)',fontsize='x-large')
+for i in match_9197:
+    plt.plot((stauffer91_matches[i],stauffer97_matches[i]),
+             (our_h_halpha[i],our_h_halpha[i]),'-',color='grey',lw=2)
+
 ax=plt.gca()
 ax.tick_params(labelsize='large')
 plt.ylim(1.5,-8.75)
