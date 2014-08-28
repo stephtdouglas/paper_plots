@@ -28,7 +28,7 @@ for i in range(len(our_kh)):
 
 # plot the straightforward comparison of EqW measurements
 
-plt.figure()
+plt.figure(figsize=(9,8))
 ## plt.plot(our_halpha*-1,kh['EW(Ha)'],'ko')
 y = np.arange(-10,2,0.001)
 x = np.arange(-10,2)
@@ -39,9 +39,9 @@ yerr = our_halpha_err
 xerr = 0.25
 ##plt.errorbar(our_halpha*-1, our_halpha_err, marker='o')
 ##plt.errorbar(our_halpha*-1, kh['EW(Ha)'], yerr, xerr, capsize=0, ls='none', color='red', marker = 'o') #elinewidth=2) 
-plt.errorbar(their_halpha, our_halpha*-1,yerr,  xerr,  capsize=0, ls='none', color='DarkBlue', marker = 'o', markeredgecolor='DarkBlue') #elinewidth=2) 
+plt.errorbar(their_halpha, our_halpha*-1,yerr,  xerr,  capsize=0, ls='none', color='DarkBlue', marker = 'o', markeredgecolor='DarkBlue',label="Praesepe (Kafka & Honeycutt 2006)") 
 plt.ylabel('Measured EqW ($\AA$)', fontsize='x-large')
-plt.xlabel('Kafka & Honeycutt 2006 EqW ($\AA$)', fontsize='x-large')
+plt.xlabel('Literature EqW ($\AA$)', fontsize='x-large')
 plt.ylim(1.,-10.)
 plt.xlim(1.,-10.)
 ax = plt.gca()
@@ -49,12 +49,40 @@ ax.tick_params(labelsize='large')
 #plt.show()
 #plt.text(-2,-8,'161 stars')
 #plt.title('Praesepe')
-plt.legend(loc=2,numpoints=1,scatterpoints=1,frameon=False)
-plt.savefig('eqw_praesepe_v2.eps', bbox_inches='tight')
+#plt.savefig('eqw_praesepe_v2.eps', bbox_inches='tight')
 
+
+
+def calc_final_eqws(file1,file2):
+    e1 = at.read(file1)
+    e2 = at.read(file2)
+
+    eqws = (e1["eqw"] + e2["eqw"]) / 2.0
+
+    diff = e1["eqw"] - e2["eqw"]
+
+    u_eqws = np.sqrt(e2["u_eqw"]**2 + diff**2)
+
+    return eqws,u_eqws
 
 #for Hyades
 pdat_h,pobs,pobsnr,pobsr = get_data.get_data('H')
+s_eqws = at.read('/home/stephanie/ptf/kh06test/stauffer/PH97objects')
+eqw,u_eqw = calc_final_eqws(
+    "/home/stephanie/ptf/kh06test/stauffer_eqws/stauffer_eqw.txt",
+    "/home/stephanie/ptf/kh06test/stauffer_eqws/stauffer_eqw2.txt")
+
+ax = plt.subplot(111)
+ax.errorbar(s_eqws["S97_EqW"][s_eqws["S97_EqW"]>0]*-1,
+    eqw[s_eqws["S97_EqW"]>0]*-1,
+    u_eqw[s_eqws["S97_EqW"]>0],s_eqws["S97_EqW"][s_eqws["S97_EqW"]>0]*0.15,
+    fmt="D",capsize=0,color="OrangeRed",ecolor="OrangeRed",mec="OrangeRed",
+    label="Hyades (Stauffer et al. 1997)")
+plt.legend(loc=2,numpoints=1,scatterpoints=1,frameon=False,handletextpad=0.1)
+plt.savefig('paper_liteqws.eps', bbox_inches='tight')
+
+
+"""
 hya = at.read('MasterHyadesList.tsv')
 stauffer91_eqws = hya['S91']
 stauffer94_eqws = hya['S94']
@@ -135,4 +163,4 @@ ax.legend(numpoints=1,handletextpad=0.2,handlelength=1,borderaxespad=0.2,loc='up
 #plt.title('Hyades')
 plt.savefig('eqw_Hyades.eps', bbox_inches='tight')
 #plt.show()
-
+"""
